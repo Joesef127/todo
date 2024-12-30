@@ -2,7 +2,8 @@ import Navbar from '../components/Navbar';
 import round_over_plus from '../assets/icons/round_over_plus.png';
 import React, { useEffect, useState } from 'react';
 import CreateNewTask from '../components/CreateNewTask';
-import TaskList, { TaskType } from '../pages/TaskList';
+import TaskList from '../pages/TaskList';
+import { TaskType } from 'Types';
 
 export default function Home() {
   const [tasks, setTasks] = useState<TaskType[]>(() => {
@@ -64,106 +65,115 @@ export default function Home() {
   const topButtonsText = [
     'Create New Task',
     'Pending Tasks',
-    'Tasks Completed',
+    'Completed Tasks',
   ];
 
   return (
-    <>
+    <div className="w-full overflow-auto">
       <Navbar />
-      <div className="p-8 font-sans">
-        <div className="py-10">
-          <h1 className="font-medium font-sans text-xl">Hello, Adegbola</h1>
-          <p className="font-normal text-base">
-            You have {tasks.length} tasks remaining
-          </p>
-        </div>
-        <div className="flex gap-4">
-          {topButtonsText.map((text, index) => {
-            const isEven = index % 2 === 1;
-            return (
-              <div
-                key={text}
-                className={`
-                  m-1 px-2 py-3 border w-32 h-36 rounded-2xl flex flex-col justify-between gap-7 cursor-pointer 
+      <div className="w-full font-sans flex flex-col items-center justify-center overflow-auto">
+        <div className="max-w-lg p-4 overflow-x-scroll">
+          <div className="py-10">
+            <h1 className="font-medium font-sans text-xl">Hello, Adegbola</h1>
+            <p className="font-normal text-base">
+              You have {tasks.length} tasks remaining
+            </p>
+          </div>
+          <div className="flex gap-2 flex-wrap ">
+            {topButtonsText.map((text, index) => {
+              const isEven = index % 2 === 1;
+              return (
+                <div
+                  key={text}
+                  className={`
+                  max-sm:w-24 max-sm:h-24 max-sm:text-sm m-1 px-2 py-3 border w-32 h-36 rounded-2xl flex flex-col justify-between gap-4 cursor-pointer 
                   ${isEven ? 'hover:bg-red-400' : 'hover:bg-green-800'} 
                   ${isEven ? 'border-red-400' : 'border-green-800'}
                   ${isEven ? 'text-red-400' : 'text-green-800'}
                   hover:text-white focus:text-white active:text-white transition ease-in-out duration-300
                 `}
-                onClick={() => {
-                  if (text === 'Create New Task') {
-                    setShowForm(true);
-                    setShowCompleted(false);
-                  } else if (text === 'Pending Tasks') {
-                    setShowForm(false);
-                    setShowCompleted(false);
-                  } else if (text === 'Tasks Completed') {
-                    setShowForm(false);
-                    setShowCompleted(true);
-                  }
-                }}
-              >
-                <figure
-                  className={`p-1 w-fit rounded-full ${
-                    isEven ? 'bg-red-400' : 'bg-green-800'
-                  }`}
+                  onClick={() => {
+                    if (text === 'Create New Task') {
+                      setShowForm(true);
+                      setShowCompleted(false);
+                    } else if (text === 'Pending Tasks') {
+                      setShowForm(false);
+                      setShowCompleted(false);
+                    } else if (text === 'Completed Tasks') {
+                      setShowForm(false);
+                      setShowCompleted(true);
+                    }
+                  }}
                 >
-                  <img src={round_over_plus} alt="icon" className="w-6" />
-                </figure>
-                {text}
-              </div>
-            );
-          })}
-        </div>
-        <div>
-          {showForm ? (
-            <div className="p-4 my-8 bg-white rounded-xl shadow-lg max-w-xl">
-              <h2 className="mt-4 mb-10 font-bold font-sans text-5xl">
-                Create{' '}
-                <span className="font-light text-gray-300">New Task</span>
-              </h2>
-              <CreateNewTask handleAddTask={handleAddTask} />
-            </div>
-          ) : showCompleted ? (
-            <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
-              <h1 className="font-medium font-sans text-xl mb-4">
-                Completed Tasks
-              </h1>
-              {completedTasks.length > 0 ? (
-                <div>
-                  <TaskList
-                    tasks={completedTasks}
-                    handleClearTask={() => setCompletedTasks([])}
-                  />
-                  <button
-                    className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
-                    onClick={handleClearTask}
+                  <figure
+                    className={`p-1 w-fit rounded-full max-sm:w-6 ${
+                      isEven ? 'bg-red-400' : 'bg-green-800'
+                    }`}
                   >
-                    Clear Tasks
-                  </button>
+                    <img src={round_over_plus} alt="icon" className="w-6" />
+                  </figure>
+                  <span>{text}</span>
                 </div>
-              ) : (
-                <p>There are no completed tasks</p>
-              )}
-            </div>
-          ) : (
-            <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
-              <h1 className="font-medium font-sans text-xl mb-4">
-                Pending Tasks
-              </h1>
-              {tasks.length > 0 ? (
-                <TaskList
-                  handleClearTask={handleClearTask}
-                  tasks={tasks}
-                  handleTaskCompletion={handleTaskCompletion}
-                />
-              ) : (
-                <p>There are no pending tasks</p>
-              )}
-            </div>
-          )}
+              );
+            })}
+          </div>
+          <div>
+            {showForm ? (
+              <div className="p-4 my-8 bg-white rounded-xl shadow-lg max-w-xl">
+                <h2 className="mt-4 mb-8 font-medium font-sans text-5xl max-sm:text-3xl max-sm:mb-4">
+                  Create{' '}
+                  <span className="font-light text-gray-300">New Task</span>
+                </h2>
+                <CreateNewTask handleAddTask={handleAddTask} />
+              </div>
+            ) : showCompleted ? (
+              <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
+                <h2 className="mt-4 mb-8 font-medium font-sans text-5xl max-sm:text-3xl max-sm:mb-4">
+                  Completed{' '}
+                  <span className="font-light text-gray-300">Task</span>
+                </h2>
+                {completedTasks.length > 0 ? (
+                  <div>
+                    <TaskList
+                      tasks={completedTasks}
+                      handleClearTask={() => setCompletedTasks([])}
+                      priority={''}
+                    />
+                    <button
+                      className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
+                      // onClick={handleClearTask}
+                      onClick={() => {handleClearTask()}}
+                    >
+                      Clear Tasks
+                    </button>
+                  </div>
+                ) : (
+                  <p>There are no completed tasks</p>
+                )}
+              </div>
+            ) : (
+              <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
+                <h2 className="mt-4 mb-8 font-medium font-sans text-5xl max-sm:text-3xl max-sm:mb-4">
+                  Pending <span className="font-light text-gray-300">Task</span>
+                </h2>
+                {tasks.length > 0 ? (
+                  <TaskList
+                    // handleClearTask={handleClearTask}
+                    tasks={tasks}
+                    handleTaskCompletion={handleTaskCompletion}
+                    handleClearTask={function (): void {
+                      throw new Error('Function not implemented.');
+                    }}
+                    priority={''}
+                  />
+                ) : (
+                  <p>There are no pending tasks</p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }

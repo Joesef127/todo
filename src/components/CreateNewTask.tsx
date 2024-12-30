@@ -12,16 +12,19 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleAddTask(title, description, priority);
-    e.currentTarget.reset();
+    // e.currentTarget.reset();
+    setTitle('');
+    setDescription('');
+    setPriority('');
   };
 
   // Function to determine the select's text color class
   const getPriorityColor = () => {
     switch (priority) {
       case 'Not Important':
-        return 'text-blue-600';
-      case 'Moderate':
         return 'text-orange-700';
+      case 'Moderate':
+        return 'text-blue-600';
       case 'Very Important':
         return 'text-green-800';
       default:
@@ -38,7 +41,7 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
       <div className="mb-4">
         <input
           name="title"
-          className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl text-gray-600"
+          className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
           type="text"
           value={title}
           placeholder="Task Title"
@@ -49,22 +52,23 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
       <div className="mb-4">
         <input
           name="description"
-          className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl text-gray-600"
+          className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
           value={description}
-          placeholder="Task Description"
+          placeholder="Task Description (optional)"
           onChange={(e) => setDescription(e.target.value)}
-          required
         />
       </div>
       <div className="mb-4">
         <select
           name="priority"
-          className={`block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl ${getPriorityColor()}`}
+          className={`block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg ${getPriorityColor()}`}
           value={priority}
           onChange={(e) => setPriority(e.target.value)}
           required
         >
-          <option value="" className="text-gray-500">Select Priority</option>
+          <option value="" className="text-gray-500">
+            Select Priority
+          </option>
           <option value="Not Important">Not Important</option>
           <option value="Moderate">Moderate</option>
           <option value="Very Important">Very Important</option>

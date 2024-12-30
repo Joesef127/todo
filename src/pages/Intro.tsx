@@ -14,10 +14,10 @@ export default function Intro() {
       {/* Content */}
       <div className="relative z-10 flex items-center justify-between gap-8 flex-col h-full py-60">
         <div>
-          <h1 className="text-white text-[200px] leading-tight font-bold font-roboto ">
+          <h1 className="text-white text-[200px] max-sm:text-8xl leading-tight font-bold font-roboto ">
             To Do
           </h1>
-          <p className="mt-3 text-4xl text-red-400 font-light text-center">
+          <p className="mt-3 text-4xl max-sm:text-2xl text-red-400 font-light text-center">
             Create And Manage <br /> Your Tasks Now.
           </p>
         </div>

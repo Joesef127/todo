@@ -1,24 +1,11 @@
 import Task from '../components/Task';
-// import { useEffect, useState } from 'react';
-
-export type TaskType = {
-  id: string;
-  title: string;
-  description: string;
-  priority: string;
-  // completed: boolean;
-};
-
-type TaskListProps = {
-  tasks: TaskType[];
-  handleClearTask: () => void;
-  handleTaskCompletion?: (taskId: string) => void;
-};
+import { TaskListProps } from 'Types';
 
 export default function TaskList({
   tasks,
   handleClearTask,
   handleTaskCompletion,
+  priority
 }: TaskListProps) {
   return (
     <div className="flex flex-col gap-2">
@@ -27,6 +14,7 @@ export default function TaskList({
           key={task.id}
           {...task}
           handleTaskCompletion={handleTaskCompletion}
+          // priority={priority}
         />
       ))}
       {/* <button
