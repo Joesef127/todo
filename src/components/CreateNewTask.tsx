@@ -12,6 +12,7 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     handleAddTask(title, description, priority);
+    alert('Your task has been added to pending tasks');
     // e.currentTarget.reset();
     setTitle('');
     setDescription('');
