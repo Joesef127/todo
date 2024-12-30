@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import CreateNewTask from '../components/CreateNewTask';
 import TaskList from '../pages/TaskList';
 import { TaskType } from 'Types';
+import CompletedTasks from './CompletedTasks';
 
 export default function Home() {
   const [tasks, setTasks] = useState<TaskType[]>(() => {
@@ -134,18 +135,18 @@ export default function Home() {
                 </h2>
                 {completedTasks.length > 0 ? (
                   <div>
-                    <TaskList
+                    <CompletedTasks
                       tasks={completedTasks}
                       handleClearTask={() => setCompletedTasks([])}
                       priority={''}
                     />
-                    <button
+                    {/* <button
                       className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
                       // onClick={handleClearTask}
                       onClick={() => {handleClearTask()}}
                     >
                       Clear Tasks
-                    </button>
+                    </button> */}
                   </div>
                 ) : (
                   <p>There are no completed tasks</p>
@@ -161,9 +162,6 @@ export default function Home() {
                     // handleClearTask={handleClearTask}
                     tasks={tasks}
                     handleTaskCompletion={handleTaskCompletion}
-                    handleClearTask={function (): void {
-                      throw new Error('Function not implemented.');
-                    }}
                     priority={''}
                   />
                 ) : (

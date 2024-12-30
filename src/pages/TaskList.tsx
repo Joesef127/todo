@@ -3,9 +3,9 @@ import { TaskListProps } from 'Types';
 
 export default function TaskList({
   tasks,
-  handleClearTask,
+  // handleClearTask,
   handleTaskCompletion,
-  priority
+  priority,
 }: TaskListProps) {
   return (
     <div className="flex flex-col gap-2">

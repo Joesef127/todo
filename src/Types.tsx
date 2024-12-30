@@ -8,6 +8,13 @@ export type TaskType = {
 
 export type TaskListProps = {
   tasks: TaskType[];
+  // handleClearTask: () => void;
+  handleTaskCompletion?: (taskId: string) => void;
+  priority: string;
+};
+
+export type CompletedTaskListProps = {
+  tasks: TaskType[];
   handleClearTask: () => void;
   handleTaskCompletion?: (taskId: string) => void;
   priority: string;
