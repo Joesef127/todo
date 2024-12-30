@@ -1,8 +1,18 @@
-import bg_two from '../assets/images/bg_two.jpg';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import bg_two from "../assets/images/bg_two.jpg";
+import { useNavigate } from "react-router-dom";
 
-export default function Intro() {
-  const navigate = useNavigate();
+export default function Intro({ handleUsername }: { handleUsername: (name: string) => void }) {
+  const [username, setUsername] = useState<string>("");
+
+  const navigate = useNavigate()
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    handleUsername(username); 
+    navigate('/home'); 
+  };
+
   return (
     <div
       className="relative h-screen bg-cover bg-center bg-no-repeat"
@@ -21,14 +31,23 @@ export default function Intro() {
             Create And Manage <br /> Your Tasks Now.
           </p>
         </div>
-        <button
-          className="px-24 py-3 border text-white border-white rounded-full hover:bg-white hover:text-black transition ease-in-out duration-300"
-          onClick={() => {
-            navigate('/home');
-          }}
-        >
-          Get Started
-        </button>
+        <form onSubmit={onSubmit}>
+          <input
+            type="text"
+            id="username"
+            value={username}
+            required
+            placeholder="What should I call you?"
+            className="w-full px-6 py-3 text-xl font-medium text-gray-800 bg-white rounded-md border border-gray-300 focus:outline-none focus:border-red-400"
+            onChange={(e) => setUsername(e.target.value)}
+          />
+          <button
+            type="submit"
+            className="px-24 py-3 border text-white border-white rounded-full hover:bg-white hover:text-black transition ease-in-out duration-300"
+          >
+            Get Started
+          </button>
+        </form>
       </div>
     </div>
   );

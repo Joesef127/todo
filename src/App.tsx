@@ -1,13 +1,27 @@
 import Intro from "pages/Intro";
 import Home from "pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 export default function App() {
+  const [username, setUsername] = useState<string>(
+    JSON.parse(localStorage.getItem("username") || '""')
+  );
+
+  const handleUsername = (name: string) => {
+    if (name.trim()) {
+      localStorage.setItem("username", JSON.stringify(name));
+      setUsername(name);
+    } else {
+      alert("Please enter a valid name");
+    }
+  };
+
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Intro />} />
-        <Route path="/home" element={<Home />} />
+        <Route path="/" element={<Intro handleUsername={handleUsername} />} />
+        <Route path="/home" element={<Home username={username} />} />
       </Routes>
     </Router>
   );

@@ -6,7 +6,7 @@ import TaskList from '../pages/TaskList';
 import { TaskType } from 'Types';
 import CompletedTasks from './CompletedTasks';
 
-export default function Home() {
+export default function Home({ username }: { username: string }) {
   const [tasks, setTasks] = useState<TaskType[]>(() => {
     const savedTasks = localStorage.getItem('tasks');
     return savedTasks ? JSON.parse(savedTasks) : [];
@@ -17,14 +17,12 @@ export default function Home() {
   });
   const [showForm, setShowForm] = useState<boolean>(true);
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
+  // const [username, setUsername] = useState<string | null>('');
 
-  // Load tasks from local storage on page load
   // useEffect(() => {
-  //   const savedCompleted = JSON.parse(
-  //     localStorage.getItem(COMPLETED_TASKS_KEY) || '[]'
-  //   );
-  //   setTasks(savedTasks);
-  //   setCompletedTasks(savedCompleted);
+  //   const savedUsername = localStorage.getItem('username');
+  //   console.log(savedUsername)
+  //   setUsername(savedUsername || 'Dear User');
   // }, []);
 
   const TASKS_KEY = 'tasks';
@@ -61,7 +59,7 @@ export default function Home() {
       setTasks(tasks.filter((task) => task.id !== taskId));
       setCompletedTasks((prevCompleted) => [...prevCompleted, taskToComplete]);
     }
-    alert("Your task has been added to completed tasks")
+    alert('Your task has been added to completed tasks');
   };
 
   const topButtonsText = [
@@ -76,7 +74,7 @@ export default function Home() {
       <div className="w-full font-sans flex flex-col items-center justify-center overflow-auto">
         <div className="max-w-lg p-4 overflow-x-scroll">
           <div className="py-10">
-            <h1 className="font-medium font-sans text-xl">Hello!</h1>
+            <h1 className="font-medium font-sans text-xl">Hello {username || 'Dear User'}!</h1>
             <p className="font-normal text-base">
               You have {tasks.length} tasks remaining
             </p>
