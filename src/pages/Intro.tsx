@@ -31,19 +31,19 @@ export default function Intro({ handleUsername }: { handleUsername: (name: strin
             Create And Manage <br /> Your Tasks Now.
           </p>
         </div>
-        <form onSubmit={onSubmit}>
+        <form onSubmit={onSubmit} className="flex items-center justify-center flex-col">
           <input
             type="text"
             id="username"
             value={username}
             required
             placeholder="What should I call you?"
-            className="w-full px-6 py-3 text-xl font-medium text-gray-800 bg-white rounded-md border border-gray-300 focus:outline-none focus:border-red-400"
+            className="w-full my-2 px-6 py-3 text-xl font-medium text-white bg-transparent border-b border-b-white focus:outline-none focus:border-b-white focus:bg-transparent active:bg-transparent"
             onChange={(e) => setUsername(e.target.value)}
           />
           <button
             type="submit"
-            className="px-24 py-3 border text-white border-white rounded-full hover:bg-white hover:text-black transition ease-in-out duration-300"
+            className="my-4 px-24 py-3 border text-white border-white rounded-full hover:bg-white hover:text-black transition ease-in-out duration-300"
           >
             Get Started
           </button>
