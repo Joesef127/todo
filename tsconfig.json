@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "target": "es2016",
+    "module": "esnext",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./src",
+    "paths": {
+      "@components/*": ["components/*"],
+      "@utils/*": ["utils/*"]
+    },
+    "rootDir": "src",                                /* Source directory for TypeScript files. */
+    "outDir": "dist",                                /* Output directory for compiled files. */
+
+    /* Module Resolution */
+    "moduleResolution": "node",                      /* Resolve modules as Node.js does. */
+    "allowSyntheticDefaultImports": true,            /* Allow default imports from modules without default exports. */
+
+    /* Emit Options */
+    "sourceMap": true,                               /* Generate source maps for debugging. */
+    "declaration": true,                             /* Generate type definition files. */
+    "declarationMap": true                           /* Include maps for declaration files. */
+  },
+  "include": ["src"],                                /* Include files from the source folder. */
+  "exclude": ["node_modules", "dist"]                /* Exclude these directories. */
+}
