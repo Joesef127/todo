@@ -61,6 +61,7 @@ export default function Home() {
       setTasks(tasks.filter((task) => task.id !== taskId));
       setCompletedTasks((prevCompleted) => [...prevCompleted, taskToComplete]);
     }
+    alert("Your task has been added to completed tasks")
   };
 
   const topButtonsText = [
@@ -75,7 +76,7 @@ export default function Home() {
       <div className="w-full font-sans flex flex-col items-center justify-center overflow-auto">
         <div className="max-w-lg p-4 overflow-x-scroll">
           <div className="py-10">
-            <h1 className="font-medium font-sans text-xl">Hello, Adegbola</h1>
+            <h1 className="font-medium font-sans text-xl">Hello!</h1>
             <p className="font-normal text-base">
               You have {tasks.length} tasks remaining
             </p>
