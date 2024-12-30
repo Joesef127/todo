@@ -5,26 +5,34 @@ import CreateNewTask from '../components/CreateNewTask';
 import TaskList, { TaskType } from '../pages/TaskList';
 
 export default function Home() {
-  // const [createTask, setCreateTask] = useState<boolean>(false);
-  const [tasks, setTasks] = useState<TaskType[]>([]);
-  const [showForm, setShowForm] = useState<boolean>(true);
-
-  useEffect(() => {
-    console.log('tasks', tasks);
+  const [tasks, setTasks] = useState<TaskType[]>(() => {
+    const savedTasks = localStorage.getItem('tasks');
+    return savedTasks ? JSON.parse(savedTasks) : [];
   });
+  const [completedTasks, setCompletedTasks] = useState<TaskType[]>(() => {
+    const savedCompleted = localStorage.getItem('completedTasks');
+    return savedCompleted ? JSON.parse(savedCompleted) : [];
+  });
+  const [showForm, setShowForm] = useState<boolean>(true);
+  const [showCompleted, setShowCompleted] = useState<boolean>(false);
 
-  // const handleAddTask = (e: React.FormEvent<HTMLFormElement>) => {
-  //   const formData = new FormData(e.currentTarget);
-  //   const newTask = {
-  //     id: crypto.randomUUID(),
-  //     title: formData.get('title') as string,
-  //     description: formData.get('description') as string,
-  //     priority: formData.get('priority') as string,
-  //     completed: false,
-  //   };
-  //   setTasks((prevTasks) => [...prevTasks, newTask]);
-  //   // e.currentTarget.reset();
-  // }
+  // Load tasks from local storage on page load
+  // useEffect(() => {
+  //   const savedCompleted = JSON.parse(
+  //     localStorage.getItem(COMPLETED_TASKS_KEY) || '[]'
+  //   );
+  //   setTasks(savedTasks);
+  //   setCompletedTasks(savedCompleted);
+  // }, []);
+
+  const TASKS_KEY = 'tasks';
+  const COMPLETED_TASKS_KEY = 'completedTasks';
+
+  // Save tasks to local storage whenever they are updated
+  useEffect(() => {
+    localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
+    localStorage.setItem(COMPLETED_TASKS_KEY, JSON.stringify(completedTasks));
+  }, [tasks, completedTasks]);
 
   const handleAddTask = (
     title: string,
@@ -36,13 +44,21 @@ export default function Home() {
       title,
       description,
       priority,
-      // completed: false,
     };
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
   const handleClearTask = () => {
     setTasks([]);
+    localStorage.removeItem('tasks');
+  };
+
+  const handleTaskCompletion = (taskId: string) => {
+    const taskToComplete = tasks.find((task) => task.id === taskId);
+    if (taskToComplete) {
+      setTasks(tasks.filter((task) => task.id !== taskId));
+      setCompletedTasks((prevCompleted) => [...prevCompleted, taskToComplete]);
+    }
   };
 
   const topButtonsText = [
@@ -77,8 +93,13 @@ export default function Home() {
                 onClick={() => {
                   if (text === 'Create New Task') {
                     setShowForm(true);
+                    setShowCompleted(false);
                   } else if (text === 'Pending Tasks') {
                     setShowForm(false);
+                    setShowCompleted(false);
+                  } else if (text === 'Tasks Completed') {
+                    setShowForm(false);
+                    setShowCompleted(true);
                   }
                 }}
               >
@@ -103,13 +124,41 @@ export default function Home() {
               </h2>
               <CreateNewTask handleAddTask={handleAddTask} />
             </div>
-          ) : (
-            <div className="p-4 my-8 bg-white rounded-xl shadow-lg max-w-xl">
-              <h1 className="font-medium font-sans text-xl mb-4">Your Tasks</h1>
-              {tasks.length > 0 ? (
-                <TaskList handleClearTask={handleClearTask} tasks={tasks} />
+          ) : showCompleted ? (
+            <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
+              <h1 className="font-medium font-sans text-xl mb-4">
+                Completed Tasks
+              </h1>
+              {completedTasks.length > 0 ? (
+                <div>
+                  <TaskList
+                    tasks={completedTasks}
+                    handleClearTask={() => setCompletedTasks([])}
+                  />
+                  <button
+                    className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
+                    onClick={handleClearTask}
+                  >
+                    Clear Tasks
+                  </button>
+                </div>
               ) : (
-                <p>There are no tasks</p>
+                <p>There are no completed tasks</p>
+              )}
+            </div>
+          ) : (
+            <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
+              <h1 className="font-medium font-sans text-xl mb-4">
+                Pending Tasks
+              </h1>
+              {tasks.length > 0 ? (
+                <TaskList
+                  handleClearTask={handleClearTask}
+                  tasks={tasks}
+                  handleTaskCompletion={handleTaskCompletion}
+                />
+              ) : (
+                <p>There are no pending tasks</p>
               )}
             </div>
           )}
