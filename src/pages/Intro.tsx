@@ -36,7 +36,6 @@ export default function Intro({ handleUsername }: { handleUsername: (name: strin
             type="text"
             id="username"
             value={username}
-            required
             placeholder="What should I call you?"
             className="w-full my-2 px-6 py-3 text-xl font-medium text-white bg-transparent border-b border-b-white focus:outline-none focus:border-b-white focus:bg-transparent active:bg-transparent"
             onChange={(e) => setUsername(e.target.value)}
