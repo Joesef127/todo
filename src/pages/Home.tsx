@@ -76,7 +76,7 @@ export default function Home({ username }: { username: string }) {
           <div className="py-10">
             <h1 className="font-medium font-sans text-xl">Hello {username || 'Dear User'}!</h1>
             <p className="font-normal text-base">
-              You have {tasks.length} tasks remaining
+              You have {tasks.length} pending tasks 
             </p>
           </div>
           <div className="flex gap-2 flex-wrap ">
