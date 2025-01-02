@@ -1,5 +1,7 @@
 import Task from '../components/Task';
 import { TaskListProps } from 'Types';
+import DeleteTask from '../components/DeleteModal';
+import { useState } from'react';
 
 export default function TaskList({
   tasks,
@@ -7,22 +9,44 @@ export default function TaskList({
   handleTaskCompletion,
   priority,
 }: TaskListProps) {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<string | null>(null)
+
+  const handleDelete = (taskId: string | null) => {
+    console.log(`Deleted task ${taskId} successfully`)
+    handleTaskCompletion(taskId);
+  }
+
+  const openDeleteModal = (taskId: string) => {
+    setIsModalOpen(true);
+    setSelectedTask(taskId);
+  }
+
+  const closeDeleteModal = () => {
+    setIsModalOpen(false);
+    setSelectedTask(null);
+  }
+
   return (
+    <div>
     <div className="flex flex-col gap-2">
       {tasks.map((task) => (
         <Task
           key={task.id}
           {...task}
-          handleTaskCompletion={handleTaskCompletion}
+          openDeleteModal={() => {openDeleteModal(task.id)}}
           // priority={priority}
+          />
+        ))}
+    </div>
+      <div>
+        <DeleteTask
+          isOpen={isModalOpen}
+          onClose={closeDeleteModal}
+          onDelete={() => {handleDelete(selectedTask)}}
+          taskId={selectedTask}
         />
-      ))}
-      {/* <button
-        className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
-        onClick={handleClearTask}
-      >
-        Clear Tasks
-      </button> */}
+      </div>
     </div>
   );
 }

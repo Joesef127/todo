@@ -12,9 +12,7 @@ export default function App() {
     if (name.trim()) {
       localStorage.setItem("username", JSON.stringify(name));
       setUsername(name);
-    } else {
-      alert("Please enter a valid name");
-    }
+    } 
   };
 
   return (

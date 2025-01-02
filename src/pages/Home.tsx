@@ -17,49 +17,40 @@ export default function Home({ username }: { username: string }) {
   });
   const [showForm, setShowForm] = useState<boolean>(true);
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
-  // const [username, setUsername] = useState<string | null>('');
-
-  // useEffect(() => {
-  //   const savedUsername = localStorage.getItem('username');
-  //   console.log(savedUsername)
-  //   setUsername(savedUsername || 'Dear User');
-  // }, []);
-
-  const TASKS_KEY = 'tasks';
-  const COMPLETED_TASKS_KEY = 'completedTasks';
 
   // Save tasks to local storage whenever they are updated
   useEffect(() => {
-    localStorage.setItem(TASKS_KEY, JSON.stringify(tasks));
-    localStorage.setItem(COMPLETED_TASKS_KEY, JSON.stringify(completedTasks));
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
   }, [tasks, completedTasks]);
 
   const handleAddTask = (
     title: string,
     description: string,
+    date: string,
     priority: string
   ) => {
     const newTask: TaskType = {
       id: crypto.randomUUID(),
       title,
       description,
+      date,
       priority,
     };
     setTasks((prevTasks) => [...prevTasks, newTask]);
   };
 
   const handleClearTask = () => {
-    setTasks([]);
-    localStorage.removeItem('tasks');
+    setCompletedTasks([])
+    localStorage.removeItem('completedTasks');
   };
 
-  const handleTaskCompletion = (taskId: string) => {
+  const handleTaskCompletion = (taskId: string | null) => {
     const taskToComplete = tasks.find((task) => task.id === taskId);
     if (taskToComplete) {
       setTasks(tasks.filter((task) => task.id !== taskId));
       setCompletedTasks((prevCompleted) => [...prevCompleted, taskToComplete]);
     }
-    alert('Your task has been added to completed tasks');
   };
 
   const topButtonsText = [
@@ -136,16 +127,9 @@ export default function Home({ username }: { username: string }) {
                   <div>
                     <CompletedTasks
                       tasks={completedTasks}
-                      handleClearTask={() => setCompletedTasks([])}
+                      handleClearTask={handleClearTask}
                       priority={''}
                     />
-                    {/* <button
-                      className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
-                      // onClick={handleClearTask}
-                      onClick={() => {handleClearTask()}}
-                    >
-                      Clear Tasks
-                    </button> */}
                   </div>
                 ) : (
                   <p>There are no completed tasks</p>

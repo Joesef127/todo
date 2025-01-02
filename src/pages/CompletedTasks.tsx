@@ -1,19 +1,20 @@
-import Task from '../components/Task';
+import CompletedTask from '../components/CompletedTask';
 import { CompletedTaskListProps } from 'Types';
 
 export default function CompletedTasks({
   tasks,
   handleClearTask,
-  handleTaskCompletion,
+
+  // handleTaskCompletion,
   priority,
 }: CompletedTaskListProps) {
   return (
     <div className="flex flex-col gap-2">
       {tasks.map((task) => (
-        <Task
+        <CompletedTask
           key={task.id}
           {...task}
-          handleTaskCompletion={handleTaskCompletion}
+          // handleTaskCompletion={handleTaskCompletion}
           // priority={priority}
         />
       ))}
