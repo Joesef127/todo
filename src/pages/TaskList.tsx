@@ -1,13 +1,13 @@
-import Task from '../components/Task';
-import { TaskListProps } from 'Types';
-import DeleteTask from '../components/DeleteModal';
 import { useState } from'react';
+import Task from '../components/Task';
+import { TaskListProps } from '../utils/Types';
+import DeleteTask from '../components/DeleteTaskModal';
+// import ModalService from '../utils/ModalService';
 
 export default function TaskList({
   tasks,
   // handleClearTask,
   handleTaskCompletion,
-  priority,
 }: TaskListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<string | null>(null)

@@ -3,7 +3,7 @@ import round_over_plus from '../assets/icons/round_over_plus.png';
 import React, { useEffect, useState } from 'react';
 import CreateNewTask from '../components/CreateNewTask';
 import TaskList from '../pages/TaskList';
-import { TaskType } from 'Types';
+import { TaskType } from '../utils/Types';
 import CompletedTasks from './CompletedTasks';
 
 export default function Home({ username }: { username: string }) {
@@ -17,6 +17,9 @@ export default function Home({ username }: { username: string }) {
   });
   const [showForm, setShowForm] = useState<boolean>(true);
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
+  // const [singleTask, setSingleTask] = useState<TaskType | VoidFunction>(() => {
+  //   tasks.map((task) => task);
+  // });
 
   // Save tasks to local storage whenever they are updated
   useEffect(() => {
@@ -41,7 +44,7 @@ export default function Home({ username }: { username: string }) {
   };
 
   const handleClearTask = () => {
-    setCompletedTasks([])
+    setCompletedTasks([]);
     localStorage.removeItem('completedTasks');
   };
 
@@ -65,9 +68,11 @@ export default function Home({ username }: { username: string }) {
       <div className="w-full font-sans flex flex-col items-center justify-center overflow-auto">
         <div className="max-w-lg p-4 overflow-x-scroll">
           <div className="py-10">
-            <h1 className="font-medium font-sans text-xl">Hello {username || 'Dear User'}!</h1>
+            <h1 className="font-medium font-sans text-xl">
+              Hello {username || 'Dear User'}!
+            </h1>
             <p className="font-normal text-base">
-              You have {tasks.length} pending tasks 
+              You have {tasks.length} pending tasks
             </p>
           </div>
           <div className="flex gap-2 flex-wrap ">
@@ -115,7 +120,9 @@ export default function Home({ username }: { username: string }) {
                   Create{' '}
                   <span className="font-light text-gray-300">New Task</span>
                 </h2>
-                <CreateNewTask handleAddTask={handleAddTask} />
+                <CreateNewTask
+                  handleAddTask={handleAddTask}
+                />
               </div>
             ) : showCompleted ? (
               <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
@@ -145,7 +152,6 @@ export default function Home({ username }: { username: string }) {
                     // handleClearTask={handleClearTask}
                     tasks={tasks}
                     handleTaskCompletion={handleTaskCompletion}
-                    priority={''}
                   />
                 ) : (
                   <p>There are no pending tasks</p>
