@@ -24,10 +24,10 @@ export type TaskListProps = {
 };
 
 export type CompletedTaskListProps = {
-  tasks: TaskType[];
+  completedTasks: TaskType[];
   handleClearTask: () => void;
   // handleTaskCompletion?: (taskId: string) => void;
-  priority: string;
+  // priority: string;
 };
 
 export type TaskProps = TaskType & {
@@ -40,7 +40,12 @@ export type DeleteTaskModalProps = {
   onClose: () => void;
   onDelete: () => void;
   taskId: string | null;
-  // handleTaskCompletion?: (taskId: string | null) => void;
+}
+
+export type ClearTasksModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+  onDelete: () => void;
 }
 
 export type CreateTaskModalProps = {

@@ -133,9 +133,9 @@ export default function Home({ username }: { username: string }) {
                 {completedTasks.length > 0 ? (
                   <div>
                     <CompletedTasks
-                      tasks={completedTasks}
+                      completedTasks={completedTasks}
                       handleClearTask={handleClearTask}
-                      priority={''}
+                      // priority={''}
                     />
                   </div>
                 ) : (
