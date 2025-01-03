@@ -5,6 +5,7 @@ import CreateNewTask from '../components/CreateNewTask';
 import TaskList from '../pages/TaskList';
 import { TaskType } from '../utils/Types';
 import CompletedTasks from './CompletedTasks';
+import axios from 'axios';
 
 export default function Home({ username }: { username: string }) {
   const [tasks, setTasks] = useState<TaskType[]>(() => {
@@ -22,6 +23,21 @@ export default function Home({ username }: { username: string }) {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
   }, [tasks, completedTasks]);
+
+  useEffect(() => {
+    console.log('fetching tasks...');
+    axios.get('http://127.0.0.1:8000/api/tasks/').then((response) => {
+      console.log(response.data);
+    });
+    // fetch('http://127.0.0.1:8000/api/tasks/')
+    //   .then((response) => {
+    //     response.json();
+    //   })
+    //   .then((data) => {
+    //     console.log(data);
+    //     setTasks(data);
+    //   });
+  }, []);
 
   const handleAddTask = (
     title: string,
@@ -116,9 +132,7 @@ export default function Home({ username }: { username: string }) {
                   Create{' '}
                   <span className="font-light text-gray-300">New Task</span>
                 </h2>
-                <CreateNewTask
-                  handleAddTask={handleAddTask}
-                />
+                <CreateNewTask handleAddTask={handleAddTask} />
               </div>
             ) : showCompleted ? (
               <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
