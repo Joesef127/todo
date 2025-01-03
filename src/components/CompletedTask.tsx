@@ -1,5 +1,4 @@
-// import { TaskType } from '../pages/TaskList';
-import { TaskType } from 'Types';
+import { TaskType } from '../utils/Types';
 
 export default function CompletedTask({ ...props }: TaskType) {
   const getPriorityBg = () => {

@@ -2,11 +2,9 @@ import { useState } from'react';
 import Task from '../components/Task';
 import { TaskListProps } from '../utils/Types';
 import DeleteTask from '../components/DeleteTaskModal';
-// import ModalService from '../utils/ModalService';
 
 export default function TaskList({
   tasks,
-  // handleClearTask,
   handleTaskCompletion,
 }: TaskListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,7 +12,9 @@ export default function TaskList({
 
   const handleDelete = (taskId: string | null) => {
     console.log(`Deleted task ${taskId} successfully`)
-    handleTaskCompletion(taskId);
+    if (handleTaskCompletion) {
+      handleTaskCompletion(taskId);
+    }
   }
 
   const openDeleteModal = (taskId: string) => {
@@ -35,7 +35,6 @@ export default function TaskList({
           key={task.id}
           {...task}
           openDeleteModal={() => {openDeleteModal(task.id)}}
-          // priority={priority}
           />
         ))}
     </div>

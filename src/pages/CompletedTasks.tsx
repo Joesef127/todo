@@ -6,26 +6,15 @@ import { useState } from 'react';
 export default function CompletedTasks({
   completedTasks,
   handleClearTask,
-
-  // handleTaskCompletion,
-  // priority,
 }: CompletedTaskListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const [doneTasks, setDoneTasks] = useState<string | null>(null);
-
-  // const handleClear = (taskId: string | null) => {
-  //   console.log(`Deleted task ${taskId} successfully`)
-  //   handleTaskCompletion(taskId);
-  // }
 
   const openClearModal = () => {
     setIsModalOpen(true);
-    // setDoneTask(taskId);
   };
 
   const closeClearModal = () => {
     setIsModalOpen(false);
-    // setSelectedTask(null);
   };
   return (
     <div>
@@ -34,8 +23,6 @@ export default function CompletedTasks({
           <CompletedTask
             key={completedTask.id}
             {...completedTask}
-            // handleTaskCompletion={handleTaskCompletion}
-            // priority={priority}
           />
         ))}
         <button

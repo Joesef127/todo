@@ -4,7 +4,6 @@ export type TaskType = {
   description: string;
   date: string;
   priority: string;
-  // completed: boolean;
 };
 
 export type CreateNewTaskProps = {
@@ -18,20 +17,15 @@ export type CreateNewTaskProps = {
 
 export type TaskListProps = {
   tasks: TaskType[];
-  // handleClearTask: () => void;
   handleTaskCompletion?: (taskId: string | null) => void;
-  // priority: string;
 };
 
 export type CompletedTaskListProps = {
   completedTasks: TaskType[];
   handleClearTask: () => void;
-  // handleTaskCompletion?: (taskId: string) => void;
-  // priority: string;
 };
 
 export type TaskProps = TaskType & {
-  // handleTaskCompletion?: (taskId: string) => void;
   openDeleteModal: (taskId: string) => void;
 };
 

@@ -30,7 +30,6 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
     setPriority('');
   };
 
-  // Function to determine the select's text color class
   const getPriorityColor = () => {
     switch (priority) {
       case 'Not Important':
@@ -40,7 +39,7 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
       case 'Very Important':
         return 'text-green-800';
       default:
-        return 'text-gray-500'; // Default color
+        return 'text-gray-500';
     }
   };
 
@@ -73,13 +72,16 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
           />
         </div>
         <div className="mb-4">
-          <input
-            name="date"
-            type="date"
-            className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-          />
+          <div className="flex relative w-full  bg-[#FDFBFB] border-b-2 border-b-stone-500 outline-none font-light ">
+            <label className={`absolute h-full "w-3/4" text-gray-600 ${date ? 'text-xs -top-2 text-gray-600' : 'text-xl max-sm:text-lg opacity-70 bg-[#FDFBFB]'}`}>Due Date</label>
+            <input
+              name="date"
+              type="date"
+              className={`${date ? 'text-xl max-sm:text-lg text-gray-600' : 'text-transparent active:text-transparent'} block w-full h-full outline-none bg-inherit`}
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+            />
+          </div>
         </div>
         <div className="mb-4">
           <select
@@ -102,7 +104,9 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
             type="submit"
             className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
             form="create-task"
-            onClick={() => {openCreateModal(title)}}
+            onClick={() => {
+              openCreateModal(title);
+            }}
           >
             Create Task
           </button>

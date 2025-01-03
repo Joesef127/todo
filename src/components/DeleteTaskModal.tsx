@@ -1,7 +1,6 @@
 'use client';
 
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import { DeleteTaskModalProps } from '../utils/Types';
 
 export default function DeleteTask({

@@ -17,11 +17,7 @@ export default function Home({ username }: { username: string }) {
   });
   const [showForm, setShowForm] = useState<boolean>(true);
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
-  // const [singleTask, setSingleTask] = useState<TaskType | VoidFunction>(() => {
-  //   tasks.map((task) => task);
-  // });
 
-  // Save tasks to local storage whenever they are updated
   useEffect(() => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
@@ -135,7 +131,6 @@ export default function Home({ username }: { username: string }) {
                     <CompletedTasks
                       completedTasks={completedTasks}
                       handleClearTask={handleClearTask}
-                      // priority={''}
                     />
                   </div>
                 ) : (
@@ -149,7 +144,6 @@ export default function Home({ username }: { username: string }) {
                 </h2>
                 {tasks.length > 0 ? (
                   <TaskList
-                    // handleClearTask={handleClearTask}
                     tasks={tasks}
                     handleTaskCompletion={handleTaskCompletion}
                   />
