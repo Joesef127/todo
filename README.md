@@ -96,7 +96,7 @@ We welcome contributions to improve HiveTodo! Please follow these steps:
 
 ## Contact
 For inquiries, reach out via email:
-- **Adegbola Dayo**: [Adegboladayor@gmail.com](mailto:Adegboladayor@gmail.com)
+- **Adegbola Adedayo**: [Adegboladayor@gmail.com](mailto:Adegboladayor@gmail.com)
 
 Follow and explore my other projects on GitHub:
 - **GitHub**: [joesef127](https://github.com/joesef127)
