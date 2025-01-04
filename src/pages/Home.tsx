@@ -28,28 +28,22 @@ export default function Home({ username }: { username: string }) {
     console.log('fetching tasks...');
     axios.get('http://127.0.0.1:8000/api/tasks/').then((response) => {
       console.log(response.data);
+      setTasks(response.data.tasks);
     });
-    // fetch('http://127.0.0.1:8000/api/tasks/')
-    //   .then((response) => {
-    //     response.json();
-    //   })
-    //   .then((data) => {
-    //     console.log(data);
-    //     setTasks(data);
-    //   });
   }, []);
 
   const handleAddTask = (
-    title: string,
+    id: number,
+    name: string,
     description: string,
-    date: string,
+    due_date: string,
     priority: string
   ) => {
     const newTask: TaskType = {
-      id: crypto.randomUUID(),
-      title,
+      id,
+      name,
       description,
-      date,
+      due_date,
       priority,
     };
     setTasks((prevTasks) => [...prevTasks, newTask]);
@@ -60,7 +54,7 @@ export default function Home({ username }: { username: string }) {
     localStorage.removeItem('completedTasks');
   };
 
-  const handleTaskCompletion = (taskId: string | null) => {
+  const handleTaskCompletion = (taskId: number | null) => {
     const taskToComplete = tasks.find((task) => task.id === taskId);
     if (taskToComplete) {
       setTasks(tasks.filter((task) => task.id !== taskId));

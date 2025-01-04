@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import CreateTaskModal from './CreateTaskModal';
 import { CreateNewTaskProps } from '../utils/Types';
+import { getPriorityColor } from '../utils/utils';
 
 export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
   const [title, setTitle] = useState<string>('');
@@ -30,18 +31,6 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
     setPriority('');
   };
 
-  const getPriorityColor = () => {
-    switch (priority) {
-      case 'Not Important':
-        return 'text-orange-400';
-      case 'Moderate':
-        return 'text-blue-600';
-      case 'Very Important':
-        return 'text-green-800';
-      default:
-        return 'text-gray-500';
-    }
-  };
 
   return (
     <div>
@@ -86,7 +75,7 @@ export default function CreateNewTask({ handleAddTask }: CreateNewTaskProps) {
         <div className="mb-4">
           <select
             name="priority"
-            className={`block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg ${getPriorityColor()}`}
+            className={`block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg ${getPriorityColor(priority)}`}
             value={priority}
             onChange={(e) => setPriority(e.target.value)}
             required
