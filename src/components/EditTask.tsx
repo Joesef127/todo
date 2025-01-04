@@ -1,14 +1,10 @@
 'use client';
-
+import { baseUrl } from '../utils/utils';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
-// import { ClearTasksModalProps } from '../utils/Types';
 import { EditTaskModalProps } from '../utils/Types';
 import { TaskType } from '../utils/Types';
 import { getPriorityColor } from '../utils/utils';
 import { useState, useEffect } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
 import axios from 'axios';
 
 export default function EditTaskModal({
@@ -33,11 +29,13 @@ export default function EditTaskModal({
 
   useEffect(() => {
     if (id) {
-      const url = `http://localhost:8000/api/tasks/${id}`;
+      const url = baseUrl + `api/tasks/${id}`;
       axios
         .get(url)
         .then((response) => {
-          setTask(response.data.task);
+          const result = response.data;
+          setTask(result.task);
+          console.log(result);
         })
         .catch((error) => {
           console.error('Error fetching task:', error);
@@ -56,80 +54,72 @@ export default function EditTaskModal({
           <DialogPanel className="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl sm:my-8 sm:w-full sm:max-w-lg">
             <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
               <div className="sm:flex sm:items-start">
-                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left">
+                <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                   <DialogTitle
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
                     Edit Task
                   </DialogTitle>
-                  { task ? <form
-                    id="create-task"
-                    className="rounded-xl bg-[#FDFBFB] px-4 py-6"
-                    onSubmit={handleSubmit}
-                  >
-                    <div className="mb-4">
-                      <input
-                        name="title"
-                        className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
-                        type="text"
-                        value={task.name}
-                        placeholder="Task Title"
-                        onChange={(e) => setName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <input
-                        name="description"
-                        type="text"
-                        className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
-                        value={task.description}
-                        placeholder="Task Description (optional)"
-                        onChange={(e) => setDescription(e.target.value)}
-                      />
-                    </div>
-                    <div className="mb-4">
-                      <div className="flex relative w-full  bg-[#FDFBFB] border-b-2 border-b-stone-500 outline-none font-light ">
-                        <label
-                          className={`absolute h-full "w-3/4" text-gray-600 ${
-                            dueDate
-                              ? 'text-xs -top-2 text-gray-600'
-                              : 'text-xl max-sm:text-lg opacity-70 bg-[#FDFBFB]'
-                          }`}
-                        >
-                          Due Date
-                        </label>
+                  {task ? (
+                    <form
+                      id="create-task"
+                      className="rounded-xl px-4 py-6"
+                      onSubmit={handleSubmit}
+                    >
+                      <div className="mb-4">
                         <input
-                          name="date"
-                          type="date"
-                          className={`${
-                            dueDate
-                              ? 'text-xl max-sm:text-lg text-gray-600'
-                              : 'text-transparent active:text-transparent'
-                          } block w-full h-full outline-none bg-inherit`}
-                          value={task.due_date}
-                          onChange={(e) => setDueDate(e.target.value)}
+                          name="title"
+                          className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
+                          type="text"
+                          value={task.name}
+                          placeholder="Task Title"
+                          onChange={(e) => setName(e.target.value)}
+                          required
                         />
                       </div>
-                    </div>
-                    <div className="mb-4">
-                      <select
-                        name="priority"
-                        className={`block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg ${getPriorityColor(task.priority)}`}
-                        value={task.priority}
-                        onChange={(e) => setPriority(e.target.value)}
-                        required
-                      >
-                        <option value="" className="text-gray-500">
-                          Select Priority
-                        </option>
-                        <option value="Not Important">Not Important</option>
-                        <option value="Moderate">Moderate</option>
-                        <option value="Very Important">Very Important</option>
-                      </select>
-                    </div>
-                  </form> : null}
+                      <div className="mb-4">
+                        <input
+                          name="description"
+                          type="text"
+                          className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
+                          value={task.description}
+                          placeholder="Task Description (optional)"
+                          onChange={(e) => setDescription(e.target.value)}
+                        />
+                      </div>
+                      <div className="mb-4">
+                        <div className="flex relative w-full border-b-2 border-b-stone-500 outline-none font-light ">
+                          <input
+                            name="date"
+                            type="date"
+                            className="text-xl max-sm:text-lg text-gray-600
+                            block w-full h-full outline-none"
+                            value={task.due_date}
+                            onChange={(e) => setDueDate(e.target.value)}
+                          />
+                        </div>
+                      </div>
+                      <div className="mb-4">
+                        <select
+                          name="priority"
+                          className={`block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg ${getPriorityColor(
+                            task.priority
+                          )}`}
+                          value={task.priority}
+                          onChange={(e) => setPriority(e.target.value)}
+                          required
+                        >
+                          <option value="" className="text-gray-500">
+                            Select Priority
+                          </option>
+                          <option value="not important">Not Important</option>
+                          <option value="moderate">Moderate</option>
+                          <option value="very important">Very Important</option>
+                        </select>
+                      </div>
+                    </form>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -139,9 +129,9 @@ export default function EditTaskModal({
                 onClick={() => {
                   onClose();
                 }}
-                className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                className="inline-flex w-full justify-center rounded-md bg-black text-white px-3 py-2 text-sm font-semibold shadow-sm sm:ml-3 sm:w-auto border border-black hover:bg-gray-800 hover:text-white transition ease-in-out duration-300"
               >
-                Clear
+                Update
               </button>
               <button
                 type="button"

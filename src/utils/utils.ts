@@ -1,3 +1,4 @@
+export const baseUrl: string = "http://localhost:8000/";
 
 export const getPriorityColor = (priorityColor: string) => {
   switch (priorityColor) {

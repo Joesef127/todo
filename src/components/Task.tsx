@@ -35,10 +35,10 @@ export default function Task({ openDeleteModal, ...props }: TaskProps) {
           {props.priority}
         </p>
       </div>
-      <div>
-        <div className="flex items-center justify-center w-full flex-col">
+      <div className='max-sm:w-full'>
+        <div className="flex items-center justify-between w-full flex-col max-sm:gap-2 max-sm:w-full max-sm:flex-row-reverse">
         <button
-          className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-red-700 hover:text-white hover:border-red-700 transition ease-in-out duration-300"
+          className="w-full px-3 py-1 border hover:text-black border-red-700 rounded-lg bg-red-700 text-white hover:border-black hover:bg-transparent transition ease-in-out duration-300"
           onClick={() => {
             openDeleteModal(props.id);
           }}
@@ -47,7 +47,7 @@ export default function Task({ openDeleteModal, ...props }: TaskProps) {
         </button>
           <button
             type="submit"
-            className="w-full my-2 px-4 py-1 border text-black border-black rounded-full hover:bg-black hover:text-white transition ease-in-out duration-300"
+            className="w-full my-1 px-3 py-1 border text-black border-black rounded-lg hover:bg-black hover:text-white transition ease-in-out duration-300 max-sm:w-full"
             form="create-task"
             onClick={() => {
               openEditModal(props.id);

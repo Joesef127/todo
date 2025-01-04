@@ -2,7 +2,6 @@ import { useState } from 'react';
 import Task from '../components/Task';
 import { TaskListProps } from '../utils/Types';
 import DeleteTask from '../components/DeleteTaskModal';
-import EditModal from '../components/EditTask';
 
 export default function TaskList({
   tasks,
@@ -10,6 +9,7 @@ export default function TaskList({
 }: TaskListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<number | null>(null);
+  const [taskName, setTaskName] = useState<string | undefined>(undefined);
 
   const handleDelete = (taskId: number | null) => {
     if (handleTaskCompletion) {
@@ -20,6 +20,7 @@ export default function TaskList({
   const openDeleteModal = (taskId: number) => {
     setIsModalOpen(true);
     setSelectedTask(taskId);
+    setTaskName(tasks.find((task) => task.id === taskId)?.name);
   };
 
   const closeDeleteModal = () => {
@@ -31,13 +32,13 @@ export default function TaskList({
     <div>
       <div className="flex flex-col gap-2">
         {tasks.map((task) => (
-            <Task
-              key={task.id}
-              {...task}
-              openDeleteModal={() => {
-                openDeleteModal(task.id);
-              }}
-            />
+          <Task
+            key={task.id}
+            {...task}
+            openDeleteModal={() => {
+              openDeleteModal(task.id);
+            }}
+          />
         ))}
       </div>
       <div>
@@ -47,7 +48,8 @@ export default function TaskList({
           onDelete={() => {
             handleDelete(selectedTask);
           }}
-          taskId={selectedTask}
+          // taskId={selectedTask}
+          taskName={taskName}
         />
       </div>
     </div>

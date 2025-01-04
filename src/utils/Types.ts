@@ -34,7 +34,7 @@ export type DeleteTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;
-  taskId: number | null;
+  taskName: string | undefined;
 }
 
 export type ClearTasksModalProps = {
