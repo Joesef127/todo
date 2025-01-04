@@ -49,8 +49,10 @@ export default function Task({ openDeleteModal, ...props }: TaskProps) {
             type="submit"
             className="w-full my-1 px-3 py-1 border text-black border-black rounded-lg hover:bg-black hover:text-white transition ease-in-out duration-300 max-sm:w-full"
             form="create-task"
-            onClick={() => {
+            onClick={(e) => {
               openEditModal(props.id);
+
+              
             }}
           >
             Edit Task

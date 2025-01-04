@@ -35,6 +35,11 @@ export default function EditTaskModal({
         .then((response) => {
           const result = response.data;
           setTask(result.task);
+          setName(result.task.name);
+          setDescription(result.task.description);
+          setDueDate(result.task.due_date);
+          setPriority(result.task.priority);
+
           console.log(result);
         })
         .catch((error) => {
@@ -72,7 +77,7 @@ export default function EditTaskModal({
                           name="title"
                           className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
                           type="text"
-                          value={task.name}
+                          value={name}
                           placeholder="Task Title"
                           onChange={(e) => setName(e.target.value)}
                           required
@@ -83,7 +88,7 @@ export default function EditTaskModal({
                           name="description"
                           type="text"
                           className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
-                          value={task.description}
+                          value={description}
                           placeholder="Task Description (optional)"
                           onChange={(e) => setDescription(e.target.value)}
                         />
@@ -95,7 +100,7 @@ export default function EditTaskModal({
                             type="date"
                             className="text-xl max-sm:text-lg text-gray-600
                             block w-full h-full outline-none"
-                            value={task.due_date}
+                            value={dueDate}
                             onChange={(e) => setDueDate(e.target.value)}
                           />
                         </div>
@@ -106,7 +111,7 @@ export default function EditTaskModal({
                           className={`block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg ${getPriorityColor(
                             task.priority
                           )}`}
-                          value={task.priority}
+                          value={priority}
                           onChange={(e) => setPriority(e.target.value)}
                           required
                         >

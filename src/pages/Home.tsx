@@ -3,9 +3,10 @@ import round_over_plus from '../assets/icons/round_over_plus.png';
 import React, { useEffect, useState } from 'react';
 import CreateNewTask from '../components/CreateNewTask';
 import TaskList from '../pages/TaskList';
-import { TaskType } from '../utils/Types';
+import { NewTask, TaskType } from '../utils/Types';
 import CompletedTasks from './CompletedTasks';
 import axios from 'axios';
+import { baseUrl } from '../utils/utils';
 
 export default function Home({ username }: { username: string }) {
   const [tasks, setTasks] = useState<TaskType[]>(() => {
@@ -25,29 +26,58 @@ export default function Home({ username }: { username: string }) {
   }, [tasks, completedTasks]);
 
   useEffect(() => {
-    console.log('fetching tasks...');
-    axios.get('http://127.0.0.1:8000/api/tasks/').then((response) => {
-      console.log(response.data);
-      setTasks(response.data.tasks);
+    const url = baseUrl + '/api/tasks/';
+    axios.get(url).then((response) => {
+      const result = response.data;
+      // console.log(result);
+      setTasks(result.tasks);
     });
   }, []);
 
-  const handleAddTask = (
-    id: number,
+  const addNewTask = (
+    // id: number,
     name: string,
     description: string,
     due_date: string,
     priority: string
   ) => {
-    const newTask: TaskType = {
-      id,
+    const newTask: NewTask = {
       name,
       description,
       due_date,
       priority,
     };
-    setTasks((prevTasks) => [...prevTasks, newTask]);
+    const url = `${baseUrl}api/tasks/`;
+    axios({
+        method: 'POST',
+        url: url,
+        headers: {'Content-Type': 'application/json'},
+        data: newTask,
+      })
+      .then((response) => {
+        console.log(response.data);
+        console.log(newTask)
+      })
+      .catch((e: Error) => {console.log(e)})
   };
+
+  // const handleAddTask = (
+  //   id: number,
+  //   name: string,
+  //   description: string,
+  //   due_date: string,
+  //   priority: string
+  // ) => {
+  //   const newTask: TaskType = {
+  //     id,
+  //     name,
+  //     description,
+  //     due_date,
+  //     priority,
+  //   };
+
+  //   setTasks((prevTasks) => [...prevTasks, newTask]);
+  // };
 
   const handleClearTask = () => {
     setCompletedTasks([]);
@@ -126,7 +156,7 @@ export default function Home({ username }: { username: string }) {
                   Create{' '}
                   <span className="font-light text-gray-300">New Task</span>
                 </h2>
-                <CreateNewTask handleAddTask={handleAddTask} />
+                <CreateNewTask addNewTask={addNewTask} />
               </div>
             ) : showCompleted ? (
               <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">

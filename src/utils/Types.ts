@@ -6,8 +6,15 @@ export type TaskType = {
   priority: string;
 };
 
+export type NewTask = {
+  name: string,
+  description: string,
+  due_date: string,
+  priority: string,
+}
+
 export type CreateNewTaskProps = {
-  handleAddTask: (
+  addNewTask: (
     // id: number,
     name: string,
     description: string,
@@ -35,22 +42,22 @@ export type DeleteTaskModalProps = {
   onClose: () => void;
   onDelete: () => void;
   taskName: string | undefined;
-}
+};
 
 export type ClearTasksModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;
-}
+};
 
 export type CreateTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
-}
+};
 
 export type EditTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
   id: number | null;
   openEditModal: () => void;
-}
+};
