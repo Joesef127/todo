@@ -1,6 +1,6 @@
 export const baseUrl: string = "http://localhost:8000/";
 
-export const getPriorityColor = (priorityColor: string) => {
+export const getPriorityColor = (priorityColor: string | undefined) => {
   switch (priorityColor) {
     case 'not important':
       return 'text-orange-400';
@@ -13,7 +13,7 @@ export const getPriorityColor = (priorityColor: string) => {
   }
 };
 
-export const getPriorityBg = (priorityBg: string) => {
+export const getPriorityBg = (priorityBg: string | undefined) => {
   switch (priorityBg) {
     case 'not important':
       return 'bg-orange-400';

@@ -35,7 +35,6 @@ export default function Home({ username }: { username: string }) {
   }, []);
 
   const addNewTask = (
-    // id: number,
     name: string,
     description: string,
     due_date: string,
@@ -48,17 +47,27 @@ export default function Home({ username }: { username: string }) {
       priority,
     };
     const url = `${baseUrl}api/tasks/`;
-    axios({
-        method: 'POST',
-        url: url,
-        headers: {'Content-Type': 'application/json'},
-        data: newTask,
+
+    axios
+      .post(url, newTask, {
+        headers: { 'Content-Type': 'application/json' },
       })
       .then((response) => {
-        console.log(response.data);
-        console.log(newTask)
+        const createdTask: TaskType = response.data;
+        console.log('created task: ', createdTask);
+        setTasks((prevTasks) => [...prevTasks, createdTask]);
+        console.log(tasks);
       })
-      .catch((e: Error) => {console.log(e)})
+      .catch((error: Error) => {
+        console.error('Error creating task:', error);
+      });
+  };
+
+  const updateTaskInState = (updatedTask: TaskType) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
+    );
+    console.log(tasks);
   };
 
   // const handleAddTask = (
@@ -76,8 +85,16 @@ export default function Home({ username }: { username: string }) {
   //     priority,
   //   };
 
-  //   setTasks((prevTasks) => [...prevTasks, newTask]);
   // };
+
+  const handleDeleteTask = (taskId: number) => {
+    const taskToDelete = tasks.find((task) => task.id === taskId);
+    const url = `${baseUrl}api/tasks/${taskToDelete?.id}`;
+    axios.delete(url).then((response) => {
+      console.log('deleted task successfully');
+      setTasks(tasks.filter((task) => task.id!== taskId));
+    });
+  };
 
   const handleClearTask = () => {
     setCompletedTasks([]);
@@ -184,6 +201,8 @@ export default function Home({ username }: { username: string }) {
                   <TaskList
                     tasks={tasks}
                     handleTaskCompletion={handleTaskCompletion}
+                    updateTaskInState={updateTaskInState}
+                    handleDeleteTask={handleDeleteTask}
                   />
                 ) : (
                   <p>There are no pending tasks</p>

@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import Task from '../components/Task';
 import { TaskListProps } from '../utils/Types';
-import DeleteTask from '../components/DeleteTaskModal';
+import DeleteTask from '../components/CompleteTaskModal';
 
 export default function TaskList({
   tasks,
   handleTaskCompletion,
+  updateTaskInState,
+  handleDeleteTask
 }: TaskListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<number | null>(null);
@@ -35,8 +37,11 @@ export default function TaskList({
           <Task
             key={task.id}
             {...task}
+            updateTaskInState={updateTaskInState}
+            handleDeleteTask={handleDeleteTask}
             openDeleteModal={() => {
               openDeleteModal(task.id);
+            
             }}
           />
         ))}
@@ -48,7 +53,6 @@ export default function TaskList({
           onDelete={() => {
             handleDelete(selectedTask);
           }}
-          // taskId={selectedTask}
           taskName={taskName}
         />
       </div>

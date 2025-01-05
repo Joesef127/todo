@@ -25,7 +25,9 @@ export type CreateNewTaskProps = {
 
 export type TaskListProps = {
   tasks: TaskType[];
+  updateTaskInState?: (updatedtask: TaskType) => void;
   handleTaskCompletion?: (taskId: number | null) => void;
+  handleDeleteTask?: (taskId: number) => void;
 };
 
 export type CompletedTaskListProps = {
@@ -35,6 +37,8 @@ export type CompletedTaskListProps = {
 
 export type TaskProps = TaskType & {
   openDeleteModal: (taskId: number) => void;
+  updateTaskInState?: (updatedTask: TaskType) => void;
+  handleDeleteTask?: (taskId: number) => void;
 };
 
 export type DeleteTaskModalProps = {
@@ -59,5 +63,5 @@ export type EditTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
   id: number | null;
-  openEditModal: () => void;
+  editTask: (editedTask: NewTask) => void;
 };

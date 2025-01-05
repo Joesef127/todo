@@ -1,8 +1,8 @@
 'use client';
 import { baseUrl } from '../utils/utils';
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { EditTaskModalProps } from '../utils/Types';
-import { TaskType } from '../utils/Types';
+import { EditTaskModalProps, NewTask } from '../utils/Types';
+// import { TaskType } from '../utils/Types';
 import { getPriorityColor } from '../utils/utils';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
@@ -11,42 +11,66 @@ export default function EditTaskModal({
   id,
   isOpen,
   onClose,
-  openEditModal,
+  editTask,
 }: EditTaskModalProps) {
-  const [task, setTask] = useState<TaskType>();
+  const [task, setTask] = useState<NewTask | null>(null);
   const [name, setName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [dueDate, setDueDate] = useState<string>('');
   const [priority, setPriority] = useState<string>('');
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setName('');
-    setDescription('');
-    setDueDate('');
-    setPriority('');
-  };
-
   useEffect(() => {
-    if (id) {
-      const url = baseUrl + `api/tasks/${id}`;
-      axios
-        .get(url)
-        .then((response) => {
-          const result = response.data;
-          setTask(result.task);
-          setName(result.task.name);
-          setDescription(result.task.description);
-          setDueDate(result.task.due_date);
-          setPriority(result.task.priority);
+    if (id && isOpen) {
+      const fetchTaskDetails = async () => {
+        try {
+          const url = `${baseUrl}api/tasks/${id}`;
+          const response = await axios.get(url);
+          const result = response.data.task;
 
-          console.log(result);
-        })
-        .catch((error) => {
+          setTask(result);
+          setName(result.name);
+          setDescription(result.description);
+          setDueDate(result.due_date);
+          setPriority(result.priority);
+        } catch (error) {
           console.error('Error fetching task:', error);
-        });
+        }
+      };
+
+      fetchTaskDetails();
     }
-  }, [id]);
+  }, [id, isOpen]);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!id) return;
+
+    try {
+      const url = `${baseUrl}api/tasks/${id}`;
+      const updatedTask: NewTask = {
+        name,
+        description,
+        due_date: dueDate,
+        priority,
+      };
+
+      const response = await axios.post(url, updatedTask, {
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const result: NewTask = response.data.task;
+      console.log('Task updated successfully:', result);
+      setTask(result);
+      setName(result.name);
+      setDescription(result.description);
+      setDueDate(result.due_date);
+      setPriority(result.priority);
+      editTask(result);
+
+      onClose(); 
+    } catch (error) {
+      console.error('Error updating task:', error);
+    }
+  };
 
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-10">
@@ -68,7 +92,7 @@ export default function EditTaskModal({
                   </DialogTitle>
                   {task ? (
                     <form
-                      id="create-task"
+                      id="edit-task-form"
                       className="rounded-xl px-4 py-6"
                       onSubmit={handleSubmit}
                     >
@@ -94,16 +118,13 @@ export default function EditTaskModal({
                         />
                       </div>
                       <div className="mb-4">
-                        <div className="flex relative w-full border-b-2 border-b-stone-500 outline-none font-light ">
-                          <input
-                            name="date"
-                            type="date"
-                            className="text-xl max-sm:text-lg text-gray-600
-                            block w-full h-full outline-none"
-                            value={dueDate}
-                            onChange={(e) => setDueDate(e.target.value)}
-                          />
-                        </div>
+                        <input
+                          name="date"
+                          type="date"
+                          className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
+                          value={dueDate}
+                          onChange={(e) => setDueDate(e.target.value)}
+                        />
                       </div>
                       <div className="mb-4">
                         <select
@@ -123,28 +144,25 @@ export default function EditTaskModal({
                           <option value="very important">Very Important</option>
                         </select>
                       </div>
+                      <div className="mt-5 sm:flex sm:flex-row-reverse">
+                        <button
+                          type="submit"
+                          className="inline-flex w-full justify-center rounded-md bg-black text-white px-3 py-2 text-sm font-semibold shadow-sm sm:ml-3 sm:w-auto border border-black hover:bg-gray-800 hover:text-white transition ease-in-out duration-300"
+                        >
+                          Update
+                        </button>
+                        <button
+                          type="button"
+                          onClick={onClose}
+                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   ) : null}
                 </div>
               </div>
-            </div>
-            <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-              <button
-                type="button"
-                onClick={() => {
-                  onClose();
-                }}
-                className="inline-flex w-full justify-center rounded-md bg-black text-white px-3 py-2 text-sm font-semibold shadow-sm sm:ml-3 sm:w-auto border border-black hover:bg-gray-800 hover:text-white transition ease-in-out duration-300"
-              >
-                Update
-              </button>
-              <button
-                type="button"
-                onClick={onClose}
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-              >
-                Cancel
-              </button>
             </div>
           </DialogPanel>
         </div>
