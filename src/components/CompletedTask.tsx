@@ -3,7 +3,7 @@ import { getPriorityBg } from '../utils/utils';
 
 export default function CompletedTask({ ...props }: TaskType) {
   return (
-    <div className="my-2 bg-[#F0F0F0] rounded-xl p-4 flex justify-between items-center flex-wrap-reverse min-w-[280px]">
+    <div className="my-2 gap-5 bg-[#F0F0F0] rounded-xl p-4 flex justify-between items-center flex-wrap-reverse min-w-[280px]">
       <div>
         <h2 className="capitalize font-medium text-xl max-sm:text-lg text-black">
           {props.name}

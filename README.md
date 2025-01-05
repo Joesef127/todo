@@ -8,7 +8,7 @@
 ---
 
 ## Features
-- **Task Creation and Management**: Add and delete tasks easily.
+- **Task Creation and Management**: Add, edit and delete tasks easily.
 - **Task Completion Tracking**: Mark tasks as completed and view completed tasks.
 - **Responsive Design**: Optimized for mobile, tablet, and desktop devices.
 - **User-friendly Interface**: Intuitive navigation and interactions.
