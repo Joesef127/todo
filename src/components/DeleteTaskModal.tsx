@@ -1,14 +1,14 @@
 'use client';
 
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
-import { CompleteTaskModalProps } from '../utils/Types';
+import { DeleteTaskModalProps } from '../utils/Types';
 
-export default function CompleteTask({
+export default function DeleteTask({
   isOpen,
   onClose,
   onDelete,
   taskName
-}: CompleteTaskModalProps) {
+}: DeleteTaskModalProps) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-10">
       <div

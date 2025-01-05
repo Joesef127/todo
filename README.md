@@ -64,8 +64,13 @@ Ensure you have the following installed on your system:
 
 ## Usage
 1. Add tasks by typing the task details and clicking the "Add Task" button.
-2. Mark tasks as completed by clicking the checkbox next to the task.
-3. Delete tasks using the delete button.
+2. Mark tasks as completed by clicking the complete button.
+3. Delete task using the delete button.
+4. View completed tasks by clicking the "Completed Tasks" button.
+5. Clear completed task list by clicking the "clear tasks" button.
+6. Edit task by clicking the edit button.
+
+
 
 ---
 

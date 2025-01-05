@@ -41,7 +41,7 @@ export type TaskProps = TaskType & {
   handleDeleteTask?: (taskId: number) => void;
 };
 
-export type DeleteTaskModalProps = {
+export type CompleteTaskModalProps = {
   isOpen: boolean;
   onClose: () => void;
   onDelete: () => void;

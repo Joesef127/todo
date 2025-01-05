@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import Task from '../components/Task';
 import { TaskListProps } from '../utils/Types';
-import DeleteTask from '../components/CompleteTaskModal';
+import CompleteTask from '../components/CompleteTaskModal';
 
 export default function TaskList({
   tasks,
@@ -47,7 +47,7 @@ export default function TaskList({
         ))}
       </div>
       <div>
-        <DeleteTask
+        <CompleteTask
           isOpen={isModalOpen}
           onClose={closeDeleteModal}
           onDelete={() => {
