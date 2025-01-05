@@ -56,7 +56,7 @@ export default function CreateNewTask({ addNewTask }: CreateNewTaskProps) {
             type="text"
             className="block w-full bg-transparent border-b-2 border-b-stone-500 outline-none font-light text-xl max-sm:text-lg text-gray-600"
             value={description}
-            placeholder="Task Description (optional)"
+            placeholder="Task Description"
             onChange={(e) => setDescription(e.target.value)}
           />
         </div>
