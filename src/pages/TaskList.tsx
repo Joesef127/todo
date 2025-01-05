@@ -7,25 +7,27 @@ export default function TaskList({
   tasks,
   handleTaskCompletion,
   updateTaskInState,
-  handleDeleteTask
+  handleDeleteTask,
+  handleCreateTask,
+  createdTask
 }: TaskListProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<number | null>(null);
   const [taskName, setTaskName] = useState<string | undefined>(undefined);
 
-  const handleDelete = (taskId: number | null) => {
+  const handleComplete = (taskId: number | null) => {
     if (handleTaskCompletion) {
       handleTaskCompletion(taskId);
     }
   };
 
-  const openDeleteModal = (taskId: number) => {
+  const openCompleteModal = (taskId: number) => {
     setIsModalOpen(true);
     setSelectedTask(taskId);
     setTaskName(tasks.find((task) => task.id === taskId)?.name);
   };
 
-  const closeDeleteModal = () => {
+  const closeCompleteModal = () => {
     setIsModalOpen(false);
     setSelectedTask(null);
   };
@@ -37,10 +39,12 @@ export default function TaskList({
           <Task
             key={task.id}
             {...task}
+            createdTask={createdTask}
+            handleCreateTask={handleCreateTask}
             updateTaskInState={updateTaskInState}
             handleDeleteTask={handleDeleteTask}
-            openDeleteModal={() => {
-              openDeleteModal(task.id);
+            openCompleteModal={() => {
+              openCompleteModal(task.id);
             
             }}
           />
@@ -49,9 +53,9 @@ export default function TaskList({
       <div>
         <CompleteTask
           isOpen={isModalOpen}
-          onClose={closeDeleteModal}
+          onClose={closeCompleteModal}
           onDelete={() => {
-            handleDelete(selectedTask);
+            handleComplete(selectedTask);
           }}
           taskName={taskName}
         />

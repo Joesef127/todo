@@ -3,11 +3,11 @@
 import { Dialog, DialogPanel, DialogTitle } from '@headlessui/react';
 import { DeleteTaskModalProps } from '../utils/Types';
 
-export default function DeleteTask({
+export default function DeleteTaskModal({
   isOpen,
   onClose,
   onDelete,
-  taskName
+  taskName,
 }: DeleteTaskModalProps) {
   return (
     <Dialog open={isOpen} onClose={onClose} className="relative z-10">
@@ -25,11 +25,11 @@ export default function DeleteTask({
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    Complete Task?
+                    Delete Task?
                   </DialogTitle>
                   <div className="mt-2">
                     <p className="max-sm:text-sm text-gray-500">
-                      Are you sure you want to complete the task{' '}
+                      Are you sure you want to delete the task{' '}
                       <span className="font-semibold">{taskName}</span>?
                     </p>
                     <p className="my-1">
@@ -48,7 +48,7 @@ export default function DeleteTask({
                 }}
                 className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
               >
-                Complete
+                Delete
               </button>
               <button
                 type="button"

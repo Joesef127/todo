@@ -1,50 +1,57 @@
-import { NewTask, TaskProps } from '../utils/Types';
+import { NewTask, TaskProps, TaskType } from '../utils/Types';
 import EditTaskModal from './EditTask';
-import { useEffect, useState } from 'react';
-import { baseUrl, getPriorityBg } from '../utils/utils';
-import axios from 'axios';
-// import axios from 'axios';
-// import { baseUrl } from '../utils/utils';
+import { useState } from 'react';
+import { getPriorityBg } from '../utils/utils';
+import DeleteTaskModal from '../components/DeleteTaskModal';
 
 export default function Task({
-  openDeleteModal,
+  openCompleteModal,
   updateTaskInState,
   handleDeleteTask,
+  handleCreateTask,
+  createdTask,
   ...props
 }: TaskProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<number | null>(null);
   const [editedTask, setEditedTask] = useState<NewTask>();
+  const [newlyCreatedTask, setNewlyCreatedTask] = useState<TaskType | undefined>(createdTask);
 
-  useEffect(() => {
-    console.log(
-      'Task id: ',
-      props.id,
-      'task name: ',
-      props.name,
-      'task desc: ',
-      props.description,
-      'task due date: ',
-      props.due_date,
-      'task priority: ',
-      props.priority
-    );
-  }, []);
+  const handleTaskDelete = () => {
+    if (handleDeleteTask) {
+      handleDeleteTask(props.id);
+    }
+  };
 
   const openEditModal = (taskId: number | null) => {
-    setIsModalOpen(true);
+    setIsEditModalOpen(true);
     setSelectedTask(props.id);
   };
 
   const closeEditModal = () => {
-    setIsModalOpen(false);
+    setIsEditModalOpen(false);
     setSelectedTask(null);
+  };
+
+  const openDeleteModal = (taskId: number | null) => {
+    if (handleDeleteTask) {
+      setIsDeleteModalOpen(true);
+      setSelectedTask(props.id);
+    }
+  };
+
+  const closeDeleteModal = () => {
+      setIsDeleteModalOpen(false);
+      setSelectedTask(null);
   };
 
   const editTask = (editedTask: NewTask) => {
     setEditedTask(editedTask);
-    console.log(editedTask);
+    console.log('editedTask', editedTask);
   };
+
+  
 
   return (
     <div className="my-2 bg-[#F0F0F0] rounded-xl p-4 flex justify-between items-center max-sm:flex-col max-sm:items-start gap-3">
@@ -71,7 +78,7 @@ export default function Task({
           <button
             className="w-full my-1 px-3 py-1 border text-black border-black rounded-lg hover:bg-black hover:text-white transition ease-in-out duration-300 max-sm:w-full"
             onClick={() => {
-              openDeleteModal(props.id);
+              openCompleteModal(props.id);
             }}
           >
             Complete
@@ -92,7 +99,6 @@ export default function Task({
             
             onClick={(e) => {
               openDeleteModal(props.id);
-              if (handleDeleteTask) handleDeleteTask(props.id);
             }}
           >
             Delete
@@ -101,10 +107,16 @@ export default function Task({
       </div>
       <EditTaskModal
         id={selectedTask}
-        isOpen={isModalOpen}
+        isOpen={isEditModalOpen}
         onClose={closeEditModal}
         editTask={editTask}
       />
+      <DeleteTaskModal
+        isOpen={isDeleteModalOpen}
+        onClose={closeDeleteModal}
+        onDelete={handleTaskDelete} 
+        taskName={editedTask? editedTask.name : props.name}
+        />
     </div>
   );
 }

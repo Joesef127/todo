@@ -9,30 +9,39 @@ import axios from 'axios';
 import { baseUrl } from '../utils/utils';
 
 export default function Home({ username }: { username: string }) {
-  const [tasks, setTasks] = useState<TaskType[]>(() => {
-    const savedTasks = localStorage.getItem('tasks');
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
-  const [completedTasks, setCompletedTasks] = useState<TaskType[]>(() => {
-    const savedCompleted = localStorage.getItem('completedTasks');
-    return savedCompleted ? JSON.parse(savedCompleted) : [];
-  });
+  const [tasks, setTasks] = useState<TaskType[]>([]);
+  const [completedTasks, setCompletedTasks] = useState<TaskType[]>([]);
   const [showForm, setShowForm] = useState<boolean>(true);
   const [showCompleted, setShowCompleted] = useState<boolean>(false);
+  const [createdTask, setCreatedTask] = useState<TaskType | undefined>(
+    undefined
+  );
 
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
-  }, [tasks, completedTasks]);
+  // useEffect(() => {
+  //   localStorage.setItem('tasks', JSON.stringify(tasks));
+  //   localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
+  // }, [tasks, completedTasks]);
 
   useEffect(() => {
     const url = baseUrl + '/api/tasks/';
     axios.get(url).then((response) => {
-      const result = response.data;
-      // console.log(result);
-      setTasks(result.tasks);
+      const result = response.data.tasks;
+      setTasks(result);
     });
   }, []);
+
+  useEffect(() => {
+    const url = baseUrl + '/api/completed-tasks';
+    axios.get(url).then((response) => {
+      const result = response.data.completed_tasks;
+      setCompletedTasks(result);
+    });
+  }, []);
+
+  const handleCreateTask = (createdTask: TaskType | undefined) => {
+    setCreatedTask(createdTask);
+    console.log('created task', createdTask);
+  };
 
   const addNewTask = (
     name: string,
@@ -53,10 +62,11 @@ export default function Home({ username }: { username: string }) {
         headers: { 'Content-Type': 'application/json' },
       })
       .then((response) => {
-        const createdTask: TaskType = response.data;
+        const createdTask: TaskType = response.data.task;
         console.log('created task: ', createdTask);
+        handleCreateTask(createdTask);
         setTasks((prevTasks) => [...prevTasks, createdTask]);
-        console.log(tasks);
+        console.log('tasks', tasks);
       })
       .catch((error: Error) => {
         console.error('Error creating task:', error);
@@ -70,42 +80,43 @@ export default function Home({ username }: { username: string }) {
     console.log(tasks);
   };
 
-  // const handleAddTask = (
-  //   id: number,
-  //   name: string,
-  //   description: string,
-  //   due_date: string,
-  //   priority: string
-  // ) => {
-  //   const newTask: TaskType = {
-  //     id,
-  //     name,
-  //     description,
-  //     due_date,
-  //     priority,
-  //   };
-
-  // };
-
   const handleDeleteTask = (taskId: number) => {
     const taskToDelete = tasks.find((task) => task.id === taskId);
     const url = `${baseUrl}api/tasks/${taskToDelete?.id}`;
     axios.delete(url).then((response) => {
       console.log('deleted task successfully');
-      setTasks(tasks.filter((task) => task.id!== taskId));
+      setTasks(tasks.filter((task) => task.id !== taskId));
     });
   };
 
   const handleClearTask = () => {
-    setCompletedTasks([]);
-    localStorage.removeItem('completedTasks');
+    const url = `${baseUrl}api/completed-tasks/`;
+    axios.delete(url).then((response) => {
+      console.log('deleted completed tasks successfully');
+      setCompletedTasks([]);
+    });
   };
 
   const handleTaskCompletion = (taskId: number | null) => {
     const taskToComplete = tasks.find((task) => task.id === taskId);
     if (taskToComplete) {
       setTasks(tasks.filter((task) => task.id !== taskId));
-      setCompletedTasks((prevCompleted) => [...prevCompleted, taskToComplete]);
+
+      const url = `${baseUrl}api/completed-tasks/`;
+      axios
+        .post(url, taskToComplete, {
+          headers: { 'Content-Type': 'application/json' },
+        })
+        .then((response) => {
+          setCompletedTasks((prevCompleted) => [
+            ...prevCompleted,
+            taskToComplete,
+          ]);
+          console.log('completed task: ', response.data);
+        })
+        .catch((error: Error) => {
+          console.error('Error completing task:', error);
+        });
     }
   };
 
@@ -121,11 +132,12 @@ export default function Home({ username }: { username: string }) {
       <div className="w-full font-sans flex flex-col items-center justify-center overflow-auto">
         <div className="max-w-lg p-4 overflow-x-scroll">
           <div className="py-10">
-            <h1 className="font-medium font-sans text-xl">
+            <h1 className="font-bold font-sans text-2xl">
               Hello {username || 'Dear User'}!
             </h1>
-            <p className="font-normal text-base">
-              You have {tasks.length} pending tasks
+            <p className="font-normal text-base text-xl">
+              You have <span className="font-bold">{tasks.length}</span> pending{' '}
+              {tasks.length > 1 ? 'tasks' : 'task'}
             </p>
           </div>
           <div className="flex gap-2 flex-wrap ">
@@ -177,12 +189,17 @@ export default function Home({ username }: { username: string }) {
               </div>
             ) : showCompleted ? (
               <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
-                <h2 className="mt-4 mb-8 font-medium font-sans text-5xl max-sm:text-3xl max-sm:mb-4">
+                <h2 className="mt-4 mb-4 font-medium font-sans text-5xl max-sm:text-3xl max-sm:mb-4">
                   Completed{' '}
-                  <span className="font-light text-gray-300">Task</span>
+                  <span className="font-light text-gray-300">Tasks</span>
                 </h2>
                 {completedTasks.length > 0 ? (
                   <div>
+                    <p className="font-normal text-base text-xl">
+                      You have completed{' '}
+                      <span className="font-bold">{completedTasks.length}</span>{' '}
+                      {completedTasks.length > 1 ? 'tasks' : 'task'} so far
+                    </p>
                     <CompletedTasks
                       completedTasks={completedTasks}
                       handleClearTask={handleClearTask}
@@ -195,7 +212,8 @@ export default function Home({ username }: { username: string }) {
             ) : (
               <div className="p-4 my-8 rounded-xl shadow-lg max-w-xl bg-[#FBF6FF]">
                 <h2 className="mt-4 mb-8 font-medium font-sans text-5xl max-sm:text-3xl max-sm:mb-4">
-                  Pending <span className="font-light text-gray-300">Task</span>
+                  Pending{' '}
+                  <span className="font-light text-gray-300">Tasks</span>
                 </h2>
                 {tasks.length > 0 ? (
                   <TaskList
@@ -203,6 +221,8 @@ export default function Home({ username }: { username: string }) {
                     handleTaskCompletion={handleTaskCompletion}
                     updateTaskInState={updateTaskInState}
                     handleDeleteTask={handleDeleteTask}
+                    handleCreateTask={handleCreateTask}
+                    createdTask={createdTask}
                   />
                 ) : (
                   <p>There are no pending tasks</p>
