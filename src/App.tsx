@@ -2,6 +2,7 @@ import Intro from "pages/Intro";
 import Home from "pages/Home";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+import Login from "pages/Login";
 
 export default function App() {
   const [username, setUsername] = useState<string>(
@@ -19,6 +20,7 @@ export default function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Intro handleUsername={handleUsername} />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/home" element={<Home username={username} />} />
       </Routes>
     </Router>

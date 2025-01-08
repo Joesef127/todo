@@ -7,6 +7,7 @@ import { NewTask, TaskType } from '../utils/Types';
 import CompletedTasks from './CompletedTasks';
 import axios from 'axios';
 import { baseUrl } from '../utils/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home({ username }: { username: string }) {
   const [tasks, setTasks] = useState<TaskType[]>([]);
@@ -17,25 +18,38 @@ export default function Home({ username }: { username: string }) {
     undefined
   );
 
-  // useEffect(() => {
-  //   localStorage.setItem('tasks', JSON.stringify(tasks));
-  //   localStorage.setItem('completedTasks', JSON.stringify(completedTasks));
-  // }, [tasks, completedTasks]);
+  const navigate = useNavigate()
 
   useEffect(() => {
     const url = baseUrl + '/api/tasks/';
     axios.get(url).then((response) => {
+      // if (response.status === 401) {
+      //   navigate('/login');
+      // }
       const result = response.data.tasks;
       setTasks(result);
-    });
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 401) {  
+        navigate('/login');  
+      } 
+    })
   }, []);
 
   useEffect(() => {
     const url = baseUrl + '/api/completed-tasks';
     axios.get(url).then((response) => {
+      // if (response.status === 401) {
+      //   navigate('/login');
+      // }
       const result = response.data.completed_tasks;
       setCompletedTasks(result);
-    });
+    })
+    .catch((error) => {
+      if (error.response && error.response.status === 401) {  
+        navigate('/login');  
+      } 
+    })
   }, []);
 
   const handleCreateTask = (createdTask: TaskType | undefined) => {
@@ -77,7 +91,6 @@ export default function Home({ username }: { username: string }) {
     setTasks((prevTasks) =>
       prevTasks.map((task) => (task.id === updatedTask.id ? updatedTask : task))
     );
-    console.log(tasks);
   };
 
   const handleDeleteTask = (taskId: number) => {
@@ -135,7 +148,7 @@ export default function Home({ username }: { username: string }) {
             <h1 className="font-bold font-sans text-2xl">
               Hello {username || 'Dear User'}!
             </h1>
-            <p className="font-normal text-base text-xl">
+            <p className="font-normal text-xl">
               You have <span className="font-bold">{tasks.length}</span> pending{' '}
               {tasks.length > 1 ? 'tasks' : 'task'}
             </p>
@@ -195,7 +208,7 @@ export default function Home({ username }: { username: string }) {
                 </h2>
                 {completedTasks.length > 0 ? (
                   <div>
-                    <p className="font-normal text-base text-xl">
+                    <p className="font-normal text-xl">
                       You have completed{' '}
                       <span className="font-bold">{completedTasks.length}</span>{' '}
                       {completedTasks.length > 1 ? 'tasks' : 'task'} so far
