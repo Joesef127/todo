@@ -1,13 +1,17 @@
 import { baseUrl } from 'utils/utils';
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import Navbar from '../components/Navbar';
+import { LoginContext } from 'App';
 
 export default function Login() {
+  const [loggedIn, setLoggedIn] = useContext(LoginContext)
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const loginUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,8 +29,16 @@ export default function Login() {
         },
       })
       .then((response) => {
-        console.log('Login successful:', response.data);
-        navigate('/home');
+        const access = response.data.access;
+        const refresh = response.data.refresh;
+        localStorage.setItem('access', access);
+        localStorage.setItem('refresh', refresh);
+        setLoggedIn(true)
+        navigate(
+          location?.state?.previousUrl && location.state.previousUrl !== '/'
+            ? location.state.previousUrl
+            : '/home'
+        );
       })
       .catch((error) => {
         console.error('Error logging in:', error.message);
@@ -35,13 +47,9 @@ export default function Login() {
 
   return (
     <div>
+      <Navbar />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <img
-            alt="Your Company"
-            src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-            className="mx-auto h-10 w-auto"
-          />
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
             Sign in to your account
           </h2>

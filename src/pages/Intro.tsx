@@ -1,16 +1,25 @@
-import { useState } from "react";
-import bg_two from "../assets/images/bg_two.jpg";
-import { useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import bg_two from '../assets/images/bg_two.jpg';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function Intro({ handleUsername }: { handleUsername: (name: string) => void }) {
-  const [username, setUsername] = useState<string>("");
+export default function Intro({
+  handleUsername,
+}: {
+  handleUsername: (name: string) => void;
+}) {
+  const [username, setUsername] = useState<string>('');
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const onSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    handleUsername(username); 
-    navigate('/home'); 
+    handleUsername(username);
+    navigate('/login', {
+      state: {
+        previousUrl: location.pathname,
+      },
+    });
   };
 
   return (
@@ -31,7 +40,10 @@ export default function Intro({ handleUsername }: { handleUsername: (name: strin
             Create And Manage <br /> Your Tasks Now.
           </p>
         </div>
-        <form onSubmit={onSubmit} className="flex items-center justify-center flex-col">
+        <form
+          onSubmit={onSubmit}
+          className="flex items-center justify-center flex-col"
+        >
           <input
             type="text"
             id="username"

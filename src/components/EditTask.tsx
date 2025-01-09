@@ -24,7 +24,12 @@ export default function EditTaskModal({
       const fetchTaskDetails = async () => {
         try {
           const url = `${baseUrl}api/tasks/${id}`;
-          const response = await axios.get(url);
+          const response = await axios.get(url, {
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${localStorage.getItem('access')}`,
+            },
+          });
           const result = response.data.task;
 
           setTask(result);
@@ -55,7 +60,10 @@ export default function EditTaskModal({
       };
 
       const response = await axios.post(url, updatedTask, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
       });
       const result: NewTask = response.data.task;
       console.log('Task updated successfully:', result);
@@ -66,7 +74,7 @@ export default function EditTaskModal({
       setPriority(result.priority);
       editTask(result);
 
-      onClose(); 
+      onClose();
     } catch (error) {
       console.error('Error updating task:', error);
     }

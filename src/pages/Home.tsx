@@ -1,13 +1,14 @@
 import Navbar from '../components/Navbar';
 import round_over_plus from '../assets/icons/round_over_plus.png';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import CreateNewTask from '../components/CreateNewTask';
 import TaskList from '../pages/TaskList';
 import { NewTask, TaskType } from '../utils/Types';
 import CompletedTasks from './CompletedTasks';
 import axios from 'axios';
 import { baseUrl } from '../utils/utils';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { LoginContext } from 'App';
 
 export default function Home({ username }: { username: string }) {
   const [tasks, setTasks] = useState<TaskType[]>([]);
@@ -17,39 +18,59 @@ export default function Home({ username }: { username: string }) {
   const [createdTask, setCreatedTask] = useState<TaskType | undefined>(
     undefined
   );
+  const [loggedIn, setLoggedIn] = useContext(LoginContext);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     const url = baseUrl + '/api/tasks/';
-    axios.get(url).then((response) => {
-      // if (response.status === 401) {
-      //   navigate('/login');
-      // }
-      const result = response.data.tasks;
-      setTasks(result);
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 401) {  
-        navigate('/login');  
-      } 
-    })
+    axios
+      .get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
+      })
+      .then((response) => {
+        const result = response.data.tasks;
+        setTasks(result);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          setLoggedIn(false);
+          navigate('/login', {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
+      });
   }, []);
 
   useEffect(() => {
     const url = baseUrl + '/api/completed-tasks';
-    axios.get(url).then((response) => {
-      // if (response.status === 401) {
-      //   navigate('/login');
-      // }
-      const result = response.data.completed_tasks;
-      setCompletedTasks(result);
-    })
-    .catch((error) => {
-      if (error.response && error.response.status === 401) {  
-        navigate('/login');  
-      } 
-    })
+    axios
+      .get(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
+      })
+      .then((response) => {
+        const result = response.data.completed_tasks;
+        setCompletedTasks(result);
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          setLoggedIn(false);
+          navigate('/login', {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
+      });
   }, []);
 
   const handleCreateTask = (createdTask: TaskType | undefined) => {
@@ -73,7 +94,10 @@ export default function Home({ username }: { username: string }) {
 
     axios
       .post(url, newTask, {
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
       })
       .then((response) => {
         const createdTask: TaskType = response.data.task;
@@ -82,8 +106,16 @@ export default function Home({ username }: { username: string }) {
         setTasks((prevTasks) => [...prevTasks, createdTask]);
         console.log('tasks', tasks);
       })
-      .catch((error: Error) => {
+      .catch((error) => {
         console.error('Error creating task:', error);
+        if (error.response.status === 401) {
+          setLoggedIn(false);
+          navigate('/login', {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
       });
   };
 
@@ -96,18 +128,54 @@ export default function Home({ username }: { username: string }) {
   const handleDeleteTask = (taskId: number) => {
     const taskToDelete = tasks.find((task) => task.id === taskId);
     const url = `${baseUrl}api/tasks/${taskToDelete?.id}`;
-    axios.delete(url).then((response) => {
-      console.log('deleted task successfully');
-      setTasks(tasks.filter((task) => task.id !== taskId));
-    });
+    axios
+      .delete(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
+      })
+      .then((response) => {
+        console.log('deleted task successfully');
+        setTasks(tasks.filter((task) => task.id !== taskId));
+      })
+      .catch((error) => {
+        console.error('Error creating task:', error);
+        if (error.response.status === 401) {
+          setLoggedIn(false);
+          navigate('/login', {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
+      });
   };
 
   const handleClearTask = () => {
     const url = `${baseUrl}api/completed-tasks/`;
-    axios.delete(url).then((response) => {
-      console.log('deleted completed tasks successfully');
-      setCompletedTasks([]);
-    });
+    axios
+      .delete(url, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access')}`,
+        },
+      })
+      .then((response) => {
+        console.log('deleted completed tasks successfully');
+        setCompletedTasks([]);
+      })
+      .catch((error) => {
+        console.error('Error creating task:', error);
+        if (error.response.status === 401) {
+          setLoggedIn(false);
+          navigate('/login', {
+            state: {
+              previousUrl: location.pathname,
+            },
+          });
+        }
+      });
   };
 
   const handleTaskCompletion = (taskId: number | null) => {
@@ -118,7 +186,10 @@ export default function Home({ username }: { username: string }) {
       const url = `${baseUrl}api/completed-tasks/`;
       axios
         .post(url, taskToComplete, {
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem('access')}`,
+          },
         })
         .then((response) => {
           setCompletedTasks((prevCompleted) => [
@@ -127,8 +198,16 @@ export default function Home({ username }: { username: string }) {
           ]);
           console.log('completed task: ', response.data);
         })
-        .catch((error: Error) => {
-          console.error('Error completing task:', error);
+        .catch((error) => {
+          console.error('Error creating task:', error);
+          if (error.response.status === 401) {
+            setLoggedIn(false);
+            navigate('/login', {
+              state: {
+                previousUrl: location.pathname,
+              },
+            });
+          }
         });
     }
   };
