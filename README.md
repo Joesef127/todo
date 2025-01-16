@@ -1,9 +1,9 @@
-# HiveTodo
+# Todo
 
-**HiveTodo** is a task management application designed to help users create, manage, and organize tasks efficiently. The application supports features such as task completion tracking, task deletion, and a sleek, responsive UI. It is built with modern web technologies to ensure a smooth user experience.
+**Todo** is a task management application designed to help users create, manage, and organize tasks efficiently. The application supports features such as task completion tracking, task deletion, and a sleek, responsive UI. It is built with modern web technologies to ensure a smooth user experience.
 
 ## Project URL
-[HiveTodo](https://hivetodo2.vercel.app)
+[Todo](https://hivetodo2.vercel.app)
 
 ---
 
