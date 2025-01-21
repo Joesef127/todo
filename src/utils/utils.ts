@@ -1,4 +1,4 @@
-export const baseUrl: string = "https://hivetodo-backend.vercel.app/";
+export const baseUrl: string = "https://todo-backend-drab-six.vercel.app/";
 
 export const getPriorityColor = (priorityColor: string | undefined) => {
   switch (priorityColor) {
