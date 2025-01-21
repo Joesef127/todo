@@ -2,25 +2,9 @@ import { useState } from 'react';
 import bg_two from '../assets/images/bg_two.jpg';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function Intro({
-  handleUsername,
-}: {
-  handleUsername: (name: string) => void;
-}) {
-  const [username, setUsername] = useState<string>('');
+export default function Intro() {
 
   const navigate = useNavigate();
-  const location = useLocation();
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    handleUsername(username);
-    navigate('/login', {
-      state: {
-        previousUrl: location.pathname,
-      },
-    });
-  };
 
   return (
     <div
@@ -40,25 +24,13 @@ export default function Intro({
             Create And Manage <br /> Your Tasks Now.
           </p>
         </div>
-        <form
-          onSubmit={onSubmit}
-          className="flex items-center justify-center flex-col"
+        <button
+          type="submit"
+          className="my-4 px-24 py-3 border text-white border-white rounded-full hover:bg-white hover:text-black transition ease-in-out duration-300"
+          onClick={() => {navigate('/login')}}
         >
-          <input
-            type="text"
-            id="username"
-            value={username}
-            placeholder="What should I call you?"
-            className="w-full my-2 px-6 py-3 text-xl font-medium text-white bg-transparent border-b border-b-white focus:outline-none focus:border-b-white focus:bg-transparent active:bg-transparent"
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="my-4 px-24 py-3 border text-white border-white rounded-full hover:bg-white hover:text-black transition ease-in-out duration-300"
-          >
-            Get Started
-          </button>
-        </form>
+          Get Started
+        </button>
       </div>
     </div>
   );

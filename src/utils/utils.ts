@@ -1,4 +1,4 @@
-export const baseUrl: string = "http://localhost:8000/";
+export const baseUrl: string = "https://hivetodo-backend.vercel.app/";
 
 export const getPriorityColor = (priorityColor: string | undefined) => {
   switch (priorityColor) {

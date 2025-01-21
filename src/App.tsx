@@ -49,7 +49,7 @@ export default function App() {
 
   const handleUsername = (name: string) => {
     if (name.trim()) {
-      localStorage.setItem('username', JSON.stringify(name));
+      const url = `${baseUrl}`
       setUsername(name);
     }
   };
@@ -58,7 +58,7 @@ export default function App() {
     <LoginContext.Provider value={[loggedIn, changeLoggedIn]}>
       <Router>
         <Routes>
-          <Route path="/" element={<Intro handleUsername={handleUsername} />} />
+          <Route path="/" element={<Intro />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home username={username} />} />

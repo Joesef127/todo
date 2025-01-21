@@ -9,6 +9,7 @@ export default function Login() {
   const [loggedIn, setLoggedIn] = useContext(LoginContext)
   const [username, setUsername] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+  const [error, setError] = useState<string>('');
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -39,6 +40,9 @@ export default function Login() {
             ? location.state.previousUrl
             : '/home'
         );
+        if (response.status >= 200 && response.status < 300) {  
+          console.log('Success:', response.data);  
+      } 
       })
       .catch((error) => {
         console.error('Error logging in:', error.message);
@@ -49,6 +53,9 @@ export default function Login() {
     <div>
       <Navbar />
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+      <div className="absolute top-24 left-auto text-red-400 text-lg">
+        {error ? error : null}
+      </div>
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
             Sign in to your account

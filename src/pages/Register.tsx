@@ -1,5 +1,5 @@
 import { baseUrl } from 'utils/utils';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
@@ -13,6 +13,12 @@ export default function Register() {
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    localStorage.removeItem('access');
+    localStorage.removeItem('refresh');
+    setLoggedIn(false);
+  }, [])
 
   const loginUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
